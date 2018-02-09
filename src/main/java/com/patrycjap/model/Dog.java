@@ -3,10 +3,11 @@ package com.patrycjap.model;
 /**
  * Created by patrioshka on 2/7/18.
  */
-public class Cats {
+public class Dog {
     private int id;
     private String name;
     private String age;
+    private String breed;
 
     public int getId() {
         return id;
@@ -30,5 +31,13 @@ public class Cats {
 
     public void setAge(String age) {
         this.age = age;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
     }
 }

@@ -131,5 +131,76 @@ public class DataSource implements Model {
         }
     }
 
+    @Override
+    public void addNewRecordDog(Statement statement, int id, String name, String age, String breed) {
+        try {
+            statement.execute("INSERT INTO " + TABLE_DOGS +
+                    " (" + COLUMN_DOGS_ID + ", " +
+                    COLUMN_DOGS_NAME + ", " +
+                    COLUMN_DOGS_AGE + ", " +
+                    COLUMN_DOGS_BREED +
+                    " ) " +
+                    "VALUES(" + id + ", '" + name + "','" + age + "',' " + breed + "')");
+        }catch (SQLException e) {
+            System.out.println("Something gone wrong.");
+        }
+
+    }
+
+    @Override
+    public void addNewRecordCat(Statement statement, int id, String name, String age) {
+
+    }
+
+    @Override
+    public void removeAnItem() {
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

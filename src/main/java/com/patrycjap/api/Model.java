@@ -15,7 +15,10 @@ public interface Model {
     void close();
     List<Dog> queryDogs(int sortOrder);
     List<Cat> queryCats(int sortOrder);
-    void addNewRecordDog(Statement statement, int id);
-    void addNewRecordCat(Statement statement, int id);
+    void printListOfDogs();
+    void printListOfCats();
+    void addNewRecordDog(Statement statement);
+    void addNewRecordCat(Statement statement);
     void removeAnItem();
+    int getCount(String table);
 }

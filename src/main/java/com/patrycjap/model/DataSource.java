@@ -133,9 +133,36 @@ public class DataSource implements Model {
     }
 
     @Override
-    public void addNewRecordDog(Statement statement, int id) {
-        System.out.println("Enter pet's name:\n ");
+    public void printListOfDogs() {
+            List<Dog> dogs = queryDogs(ORDER_BY_NONE);
+            if (dogs == null) {
+                System.out.println("No dogs in base.");
+                return;
+            }
+            for (Dog dog : dogs) {
+                System.out.println(dog.getId() + ". Name: " + dog.getName() + ", age: "
+                        + dog.getAge() + ", breed: " + dog.getBreed() + ".");
+            }
+    }
+
+    @Override
+    public void printListOfCats() {
+        List<Cat> cats = queryCats(ORDER_BY_ASC);
+        if (cats == null) {
+            System.out.println("No cats");
+            return;
+        }
+        for (Cat cat : cats) {
+            System.out.println(cat.getId() + ". Name: " + cat.getName() + ", age: " + cat.getAge() + ".");
+        }
+    }
+
+    @Override
+    public void addNewRecordDog(Statement statement) {
+        System.out.println("Enter id:\n ");
         Scanner scanner = new Scanner(System.in);
+        int id = scanner.nextInt();
+        System.out.println("Enter pet's name:\n ");
         String name = scanner.nextLine();
         System.out.println("Choose pet's age (PUPPY/JUNIOR/SENIOR):\n ");
         String age = scanner.nextLine();
@@ -154,14 +181,14 @@ public class DataSource implements Model {
             System.out.println("Something gone wrong.");
         }
 
-
-
     }
 
     @Override
-    public void addNewRecordCat(Statement statement, int id) {
-        System.out.println("Enter pet's name:\n ");
+    public void addNewRecordCat(Statement statement) {
+        System.out.println("Enter id:\n ");
         Scanner scanner = new Scanner(System.in);
+        int id = scanner.nextInt();
+        System.out.println("Enter pet's name:\n ");
         String name = scanner.nextLine();
         System.out.println("Choose pet's age (KITTEN/JUNIOR/SENIOR):\n ");
         String age = scanner.nextLine();
@@ -175,7 +202,6 @@ public class DataSource implements Model {
         }catch (SQLException e){
             System.out.println("Something gone wrong.");
         }
-
     }
 
     @Override
@@ -183,50 +209,21 @@ public class DataSource implements Model {
 
     }
 
+    @Override
+    public int getCount(String table) {
+        String sql = "SELECT COUNT(*) AS count FROM " + table;
+        try (Statement statement = connection.createStatement();
+             ResultSet results = statement.executeQuery(sql)) {
 
+            int count = results.getInt("count");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            System.out.format("Count = %d\n", count);
+            return count;
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+            return -1;
+        }
+    }
 
 
 }

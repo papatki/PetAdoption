@@ -24,13 +24,13 @@ public class Main {
                     consoleUi.printMessage("1. Adopt a dog.\n2. Adopt a cat.\n3. Exit.");
                     int choice2 = Integer.parseInt(consoleUi.getInput());
                     if (choice2 == 1) {
-//                    dataSource.getCount(""); //liczba zwierzat w bazie
+                        dataSource.getCountDogs();
                         dataSource.printListOfDogs();
                         consoleUi.printMessage("\nTo choose a dog, please type dog's name: ");
                         dataSource.removeAnItemDog();
 
                     } else if (choice2 == 2) {
-//                    dataSource.getCount("");
+                        dataSource.getCountCats();
                         dataSource.printListOfCats();
                         consoleUi.printMessage("To choose a cat, please type cat's name: ");
                         dataSource.removeAnItemCat();

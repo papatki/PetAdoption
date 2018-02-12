@@ -225,23 +225,27 @@ public class DataSource implements Model {
         try(Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT count(" + COLUMN_DOGS_NAME + ") FROM " +
                     TABLE_DOGS)){
-            int count = resultSet.getInt("Count");
-            System.out.println();
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            System.out.println("In our base we have " + count + " pets waiting for an adoption.\n");
 
         }catch (SQLException e){
-            System.out.println("Something gone wrong.");
+            System.out.println("Something gone wrong." + e.getMessage());
         }
-        String sql = "SELECT COUNT(*) AS count FROM " + table;
-        try (Statement statement = connection.createStatement();
-             ResultSet results = statement.executeQuery(sql)) {
+    }
 
-            int count = results.getInt("count");
+    @Override
+    public void getCountCats() {
+        try(Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT count(" + COLUMN_CATS_NAME + ") FROM " +
+                    TABLE_CATS)){
+            resultSet.next();
+            int count = resultSet.getInt(1);
+            System.out.println("In our base we have " + count + " pets waiting for an adoption.\n");
 
-            System.out.format("Count = %d\n", count);
-            return count;
-        } catch (SQLException e) {
-            System.out.println("Query failed: " + e.getMessage());
-            return -1;
+        }catch (SQLException e){
+            System.out.println("Something gone wrong." + e.getMessage());
         }
+
     }
 }

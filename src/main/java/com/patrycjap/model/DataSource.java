@@ -5,6 +5,7 @@ import com.patrycjap.api.Model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by patrioshka on 2/7/18.
@@ -132,7 +133,15 @@ public class DataSource implements Model {
     }
 
     @Override
-    public void addNewRecordDog(Statement statement, int id, String name, String age, String breed) {
+    public void addNewRecordDog(Statement statement, int id) {
+        System.out.println("Enter pet's name:\n ");
+        Scanner scanner = new Scanner(System.in);
+        String name = scanner.nextLine();
+        System.out.println("Choose pet's age (PUPPY/JUNIOR/SENIOR):\n ");
+        String age = scanner.nextLine();
+        System.out.println("Enter pet's breed:\n ");
+        String breed = scanner.nextLine();
+
         try {
             statement.execute("INSERT INTO " + TABLE_DOGS +
                     " (" + COLUMN_DOGS_ID + ", " +
@@ -145,10 +154,27 @@ public class DataSource implements Model {
             System.out.println("Something gone wrong.");
         }
 
+
+
     }
 
     @Override
-    public void addNewRecordCat(Statement statement, int id, String name, String age) {
+    public void addNewRecordCat(Statement statement, int id) {
+        System.out.println("Enter pet's name:\n ");
+        Scanner scanner = new Scanner(System.in);
+        String name = scanner.nextLine();
+        System.out.println("Choose pet's age (KITTEN/JUNIOR/SENIOR):\n ");
+        String age = scanner.nextLine();
+        try{
+            statement.execute("INSERT INTO " + TABLE_CATS +
+                    " (" + COLUMN_CATS_ID + ", " +
+                    COLUMN_CATS_NAME + ", " +
+                    COLUMN_CATS_AGE +
+                    " ) " +
+                    "VALUES(" + id + ", '" + name + "','" + age +  "')");
+        }catch (SQLException e){
+            System.out.println("Something gone wrong.");
+        }
 
     }
 

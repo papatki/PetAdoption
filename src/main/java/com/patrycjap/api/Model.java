@@ -15,8 +15,7 @@ public interface Model {
     void close();
     List<Dog> queryDogs(int sortOrder);
     List<Cat> queryCats(int sortOrder);
-    void addNewRecordDog(Statement statement, int id, String name, String age,
-                         String breed);
-    void addNewRecordCat(Statement statement, int id, String name, String age);
+    void addNewRecordDog(Statement statement, int id);
+    void addNewRecordCat(Statement statement, int id);
     void removeAnItem();
 }

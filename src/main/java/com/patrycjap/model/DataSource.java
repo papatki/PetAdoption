@@ -7,30 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Created by patrioshka on 2/7/18.
- */
 public class DataSource implements Model {
     public static final String DB_NAME = "pet_database.db";
     public static final String CONNECTION_STRING = "jdbc:sqlite:/home/patrioshka/IdeaProjects/PetAdoption/" + DB_NAME;
 
     public static final String TABLE_DOGS = "Dogs";
-    public static final String COLUMN_DOGS_ID = "id";
     public static final String COLUMN_DOGS_NAME = "Name";
     public static final String COLUMN_DOGS_AGE = "Age";
     public static final String COLUMN_DOGS_BREED = "Breed";
-    public static final int INDEX_DOGS_ID = 1;
-    public static final int INDEX_DOGS_NAME = 2;
-    public static final int INDEX_DOGS_AGE = 3;
-    public static final int INDEX_DOGS_BREED = 4;
+    public static final int INDEX_DOGS_NAME = 1;
+    public static final int INDEX_DOGS_AGE = 2;
+    public static final int INDEX_DOGS_BREED = 3;
 
     public static final String TABLE_CATS = "Cats";
-    public static final String COLUMN_CATS_ID = "id";
     public static final String COLUMN_CATS_NAME = "Name";
     public static final String COLUMN_CATS_AGE = "Age";
-    public static final int INDEX_CATS_ID = 1;
-    public static final int INDEX_CATS_NAME = 2;
-    public static final int INDEX_CATS_AGE = 3;
+    public static final int INDEX_CATS_NAME = 1;
+    public static final int INDEX_CATS_AGE = 2;
 
     public static final int ORDER_BY_NONE = 1;
     public static final int ORDER_BY_ASC = 2;
@@ -49,7 +42,6 @@ public class DataSource implements Model {
         } catch (SQLException e) {
             System.out.println("Couldn't connect to database: " + e.getMessage());
             return false;
-
         }
     }
 
@@ -62,7 +54,6 @@ public class DataSource implements Model {
         } catch (SQLException e) {
             System.out.println("Couldn't close connection: " + e.getMessage());
         }
-
     }
 
     @Override
@@ -85,7 +76,6 @@ public class DataSource implements Model {
             List<Dog> dogs = new ArrayList<>();
             while (resultSet.next()) {
                 Dog dog = new Dog();
-                dog.setId(resultSet.getInt(INDEX_DOGS_ID));
                 dog.setName(resultSet.getString(INDEX_DOGS_NAME));
                 dog.setAge(resultSet.getString(INDEX_DOGS_AGE));
                 dog.setBreed(resultSet.getString(INDEX_DOGS_BREED));
@@ -119,7 +109,7 @@ public class DataSource implements Model {
             List<Cat> cats = new ArrayList<>();
             while (resultSet.next()) {
                 Cat cat = new Cat();
-                cat.setId(resultSet.getInt(INDEX_CATS_ID));
+
                 cat.setName(resultSet.getString(INDEX_CATS_NAME));
                 cat.setAge(resultSet.getString(INDEX_CATS_AGE));
                 cats.add(cat);
@@ -134,34 +124,32 @@ public class DataSource implements Model {
 
     @Override
     public void printListOfDogs() {
-            List<Dog> dogs = queryDogs(ORDER_BY_NONE);
-            if (dogs == null) {
-                System.out.println("No dogs in base.");
-                return;
-            }
-            for (Dog dog : dogs) {
-                System.out.println(dog.getId() + ". Name: " + dog.getName() + ", age: "
-                        + dog.getAge() + ", breed: " + dog.getBreed() + ".");
-            }
+        List<Dog> dogs = queryDogs(ORDER_BY_NONE);
+        if (dogs == null) {
+            System.out.println("No dogs in base.");
+            return;
+        }
+        for (Dog dog : dogs) {
+            System.out.println("Name: " + dog.getName() + ", age: "
+                    + dog.getAge() + ", breed: " + dog.getBreed() + ".");
+        }
     }
 
     @Override
     public void printListOfCats() {
-        List<Cat> cats = queryCats(ORDER_BY_ASC);
+        List<Cat> cats = queryCats(ORDER_BY_NONE);
         if (cats == null) {
             System.out.println("No cats");
             return;
         }
         for (Cat cat : cats) {
-            System.out.println(cat.getId() + ". Name: " + cat.getName() + ", age: " + cat.getAge() + ".");
+            System.out.println("Name: " + cat.getName() + ", age: " + cat.getAge() + ".");
         }
     }
 
     @Override
-    public void addNewRecordDog(Statement statement) {
-        System.out.println("Enter id:\n ");
+    public void addNewRecordDog() {
         Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
         System.out.println("Enter pet's name:\n ");
         String name = scanner.nextLine();
         System.out.println("Choose pet's age (PUPPY/JUNIOR/SENIOR):\n ");
@@ -169,48 +157,80 @@ public class DataSource implements Model {
         System.out.println("Enter pet's breed:\n ");
         String breed = scanner.nextLine();
 
-        try {
+        try (Statement statement = connection.createStatement()) {
             statement.execute("INSERT INTO " + TABLE_DOGS +
-                    " (" + COLUMN_DOGS_ID + ", " +
-                    COLUMN_DOGS_NAME + ", " +
+                    " (" + COLUMN_DOGS_NAME + ", " +
                     COLUMN_DOGS_AGE + ", " +
                     COLUMN_DOGS_BREED +
                     " ) " +
-                    "VALUES(" + id + ", '" + name + "','" + age + "',' " + breed + "')");
-        }catch (SQLException e) {
+                    "VALUES( '" + name + "','" + age + "',' " + breed + "')");
+        } catch (SQLException e) {
             System.out.println("Something gone wrong.");
         }
-
     }
 
     @Override
-    public void addNewRecordCat(Statement statement) {
-        System.out.println("Enter id:\n ");
+    public void addNewRecordCat() {
+
         Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
         System.out.println("Enter pet's name:\n ");
         String name = scanner.nextLine();
         System.out.println("Choose pet's age (KITTEN/JUNIOR/SENIOR):\n ");
         String age = scanner.nextLine();
-        try{
+        try (Statement statement = connection.createStatement()) {
             statement.execute("INSERT INTO " + TABLE_CATS +
-                    " (" + COLUMN_CATS_ID + ", " +
-                    COLUMN_CATS_NAME + ", " +
+                    " ("+ COLUMN_CATS_NAME + ", " +
                     COLUMN_CATS_AGE +
                     " ) " +
-                    "VALUES(" + id + ", '" + name + "','" + age +  "')");
-        }catch (SQLException e){
+                    "VALUES( '"  + name + "','" + age + "')");
+        } catch (SQLException e) {
             System.out.println("Something gone wrong.");
         }
     }
 
     @Override
-    public void removeAnItem() {
+    public void removeAnItemDog() {
+        Scanner scanner = new Scanner(System.in);
+        String itemToRemove = scanner.nextLine();
 
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("DELETE FROM " + TABLE_DOGS +
+                    " WHERE " + COLUMN_DOGS_NAME + " = '" + itemToRemove + "'");
+            System.out.println("From now this is your pet!");
+
+        } catch (SQLException e) {
+            System.out.println("Sorry, we do not have a pet with that name :( ");
+        }
     }
 
     @Override
-    public int getCount(String table) {
+    public void removeAnItemCat() {
+
+        Scanner scanner = new Scanner(System.in);
+        String itemToRemove = scanner.nextLine();
+
+        try (Statement statement = connection.createStatement()) {
+            statement.execute("DELETE FROM " + TABLE_CATS +
+                    " WHERE " + COLUMN_CATS_NAME + " = " + itemToRemove);
+            System.out.println("From now this is your pet!");
+
+        } catch (SQLException e) {
+            System.out.println("Sorry, we do not have a pet with that name :( ");
+        }
+    }
+
+    @Override
+    public void getCountDogs() {
+
+        try(Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT count(" + COLUMN_DOGS_NAME + ") FROM " +
+                    TABLE_DOGS)){
+            int count = resultSet.getInt("Count");
+            System.out.println();
+
+        }catch (SQLException e){
+            System.out.println("Something gone wrong.");
+        }
         String sql = "SELECT COUNT(*) AS count FROM " + table;
         try (Statement statement = connection.createStatement();
              ResultSet results = statement.executeQuery(sql)) {
@@ -224,6 +244,4 @@ public class DataSource implements Model {
             return -1;
         }
     }
-
-
 }
